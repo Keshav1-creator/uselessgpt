@@ -24,5 +24,6 @@ def show_url():
     return jsonify({"url": "/uselessgpt"})
 
 if __name__ == '__main__':
-    # Flask-Login needs a secret key
-    app.run(debug=True, port=5001)
+    import os
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)
