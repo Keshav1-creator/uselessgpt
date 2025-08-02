@@ -11,7 +11,9 @@ app.secret_key = os.getenv('SECRET_KEY', 'dev_secret_key')
 
 
 
-# Serve index.html for all non-API routes under /uselessgpt
+
+# Serve index.html for root and /uselessgpt
+@app.route('/')
 @app.route('/uselessgpt')
 def index():
     return send_from_directory(app.static_folder, 'index.html')
