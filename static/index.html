@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Pointless-T Frontend</title>
+    <style>
+        /* Profile modal styles */
+        /* Removed profile modal and user styles */
+        /* Desktop layout enforced */
+        .main-flex-row {
+            display: flex;
+            flex-direction: row;
+            min-height: 80vh;
+            gap: 0;
+        }
+        .chatgpt-container {
+            flex: 1 1 0;
+            max-width: 900px;
+            margin: 32px auto;
+            border-radius: 18px;
+            background: #23242b;
+            box-shadow: 0 4px 32px #000a;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0 0 18px 0;
+        }
+        .history-tab {
+            width: 260px;
+            min-width: 220px;
+            max-width: 320px;
+            background: #181a20;
+            border-radius: 18px 0 0 18px;
+            box-shadow: 2px 0 16px #0004;
+            border-right: 2px solid #23242b;
+            padding: 18px 10px 10px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .history-header {
+            display: flex;
+        }
+        .history-list {
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .history-item {
+            min-width: 120px;
+            max-width: 220px;
+            font-size: 1em;
+            padding: 10px 8px;
+        }
+        .chat-area {
+            flex: 1 1 0;
+            padding: 24px 24px 8px 24px;
+            overflow-y: auto;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 8px;
+            padding: 0 24px 0 24px;
+            border-radius: 0 0 18px 18px;
+            background: #23242b;
+        }
+        .login-container {
+            max-width: 340px;
+            margin: 80px auto;
+            background: #23242b;
+            border-radius: 10px;
+            box-shadow: 0 2px 16px #0008;
+            padding: 32px 32px 24px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-container h2 {
+            color: #1a7494;
+            margin-bottom: 18px;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            background: #181a20;
+            color: #e0e0e0;
+            font-size: 1em;
+        }
+        .login-container input:focus {
+            outline: 2px solid #4177be;
+            background: #212d37;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%);
+            color: #181a20;
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+        .login-container button:hover {
+            background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%);
+            color: #fff;
+        }
+        .logout-btn {
+            margin: 0 0 0 16px;
+            padding: 6px 16px;
+            border-radius: 6px;
+            background: #ff5252;
+            color: #fff;
+            border: none;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background: #c62828;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #181a20;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+        }
+        .chatgpt-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #23242b;
+            border-radius: 10px;
+            box-shadow: 0 2px 16px #0008;
+            padding: 0 0 16px 0;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+        h1 {
+            text-align: center;
+            color: #ffb300;
+            letter-spacing: 1px;
+            margin: 0;
+            padding: 24px 0 8px 0;
+        }
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 24px 8px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .chat-bubble {
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            font-size: 1.08em;
+            line-height: 1.5;
+            word-break: break-word;
+            box-shadow: 0 2px 8px #0002;
+        }
+        .user-bubble {
+            align-self: flex-end;
+            background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%);
+            color: #181a20;
+        }
+        .bot-bubble {
+            align-self: flex-start;
+            background: #23242b;
+            border: 1.5px solid #ffb300;
+            color: #ffeb3b;
+        }
+        .chat-input-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            padding: 16px 24px 0 24px;
+            background: #23242b;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .chat-input-row textarea {
+            flex: 1;
+            min-height: 36px;
+            max-height: 120px;
+            resize: none;
+            border-radius: 6px;
+            border: 1px solid #333;
+            background: #181a20;
+            color: #e0e0e0;
+            font-size: 1em;
+            padding: 10px;
+            margin-bottom: 0;
+        }
+        .chat-input-row textarea:focus {
+            outline: 2px solid #ffb300;
+            background: #23242b;
+        }
+        .chat-input-row button {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%);
+            color: #181a20;
+            border: none;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, color 0.2s;
+        }
+        .chat-input-row button:hover {
+            background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%);
+            color: #fff;
+        }
+        .error {
+            color: #ff5252;
+            margin: 8px 0 0 24px;
+        }
+        /* History tab styles */
+        .main-flex-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 80vh;
+            gap: 0;
+        }
+        .history-tab {
+            width: 260px;
+            height: 80vh;
+            background: #23242b;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            box-shadow: 2px 0 12px #0006;
+            padding: 16px 16px 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10;
+            border-right: 2px solid #181a20;
+            position: static;
+            transition: none;
+        }
+        .history-header {
+            font-weight: bold;
+            color: #ffb300;
+            margin-bottom: 8px;
+            font-size: 1.13em;
+            letter-spacing: 0.5px;
+            text-align: left;
+            border-bottom: 1.5px solid #444;
+            padding-bottom: 6px;
+        }
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .history-item {
+            background: #181a20;
+            color: #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            border: 1px solid #333;
+            font-size: 0.98em;
+            transition: background 0.15s;
+        }
+        .history-item:hover {
+            background: #23242b;
+            color: #ffb300;
+        }
+        .history-toggle-btn {
+            display: none;
+        }
+        @media (max-width: 900px) {
+            .history-tab {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="main-app">
+        <div class="main-flex-row">
+            <div id="history-tab" class="history-tab">
+                <div class="history-header" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                    <span>Sessions</span>
+                    <button id="new-session-btn" title="New Chat" style="background:#23242b;color:#ffb300;border:none;font-size:1.3em;padding:0 8px;cursor:pointer;border-radius:6px;">＋</button>
+                </div>
+                <div id="history-list" class="history-list"></div>
+            </div>
+            <div class="chatgpt-container">
+                <div style="display:flex;align-items:center;justify-content:center;">
+                    <h1 style="margin-bottom:0;text-align:center;width:100%;">G-Pointless-T</h1>
+                    <div style="display:flex;align-items:center;gap:10px;">
+
+                    </div>
+                </div>
+                <div id="chat-area" class="chat-area"></div>
+                <form id="gpointlesst-form" class="chat-input-row">
+                    <textarea id="input" required rows="1" placeholder="Type your message and hit Enter..." autocomplete="off"></textarea>
+                    <button type="submit" title="Send">➤</button>
+                </form>
+                <div id="error" class="error"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Session management
+        let sessions = [];
+        let activeSessionId = null;
+
+
+
+        // --- Session helpers ---
+        function saveSessions() {
+            localStorage.setItem('gpt_sessions', JSON.stringify(sessions));
+            localStorage.setItem('gpt_activeSessionId', activeSessionId);
+        }
+        function loadSessions() {
+            try {
+                sessions = JSON.parse(localStorage.getItem('gpt_sessions')) || [];
+                activeSessionId = localStorage.getItem('gpt_activeSessionId') || (sessions[0] && sessions[0].id) || null;
+            } catch {
+                sessions = [];
+                activeSessionId = null;
+            }
+        }
+        function createSession(title = 'New Chat') {
+            const id = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+            const session = { id, title, history: [] };
+            sessions.unshift(session);
+            activeSessionId = id;
+            saveSessions();
+            return session;
+        }
+        function getActiveSession() {
+            return sessions.find(s => s.id === activeSessionId);
+        }
+        function deleteSession(id) {
+            const idx = sessions.findIndex(s => s.id === id);
+            if (idx !== -1) {
+                sessions.splice(idx, 1);
+                if (activeSessionId === id) {
+                    activeSessionId = sessions[0] ? sessions[0].id : null;
+                }
+                saveSessions();
+            }
+        }
+        function renameSession(id, newTitle) {
+            const s = sessions.find(s => s.id === id);
+            if (s) { s.title = newTitle; saveSessions(); }
+        }
+
+        // --- Chat logic ---
+        function setupChat() {
+            const form = document.getElementById('gpointlesst-form');
+            const chatArea = document.getElementById('chat-area');
+            const errorDiv = document.getElementById('error');
+            const inputBox = document.getElementById('input');
+            const historyList = document.getElementById('history-list');
+            const newSessionBtn = document.getElementById('new-session-btn');
+
+            // --- Render chat bubbles for current session ---
+            function renderChat() {
+                chatArea.innerHTML = '';
+                const session = getActiveSession();
+                if (!session || !session.history.length) return;
+                session.history.forEach(item => {
+                    addBubble(item.user, true);
+                    addBubble(item.bot, false);
+                });
+            }
+
+            function addBubble(text, isUser) {
+                const bubble = document.createElement('div');
+                bubble.className = 'chat-bubble ' + (isUser ? 'user-bubble' : 'bot-bubble');
+                bubble.textContent = text;
+                chatArea.appendChild(bubble);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+
+            // --- Render session list ---
+            function updateHistory() {
+                historyList.innerHTML = '';
+                if (!sessions.length) {
+                    const empty = document.createElement('div');
+                    empty.style.color = '#888';
+                    empty.textContent = 'No sessions yet.';
+                    historyList.appendChild(empty);
+                    return;
+                }
+                sessions.forEach((session) => {
+                    const div = document.createElement('div');
+                    div.className = 'history-item' + (session.id === activeSessionId ? ' active-session' : '');
+                    // --- Editable title ---
+                    const titleSpan = document.createElement('span');
+                    titleSpan.textContent = session.title;
+                    titleSpan.style.flex = '1';
+                    titleSpan.style.cursor = 'pointer';
+                    titleSpan.onclick = () => {
+                        activeSessionId = session.id;
+                        saveSessions();
+                        renderChat();
+                        updateHistory();
+                    };
+                    // --- Rename on double click ---
+                    titleSpan.ondblclick = (e) => {
+                        e.stopPropagation();
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = session.title;
+                        input.style.width = '90%';
+                        input.onblur = () => {
+                            renameSession(session.id, input.value.trim() || 'Untitled');
+                            updateHistory();
+                        };
+                        input.onkeydown = (ev) => {
+                            if (ev.key === 'Enter') input.blur();
+                        };
+                        div.replaceChild(input, titleSpan);
+                        input.focus();
+                    };
+                    div.appendChild(titleSpan);
+                    // --- Delete button ---
+                    const delBtn = document.createElement('button');
+                    delBtn.textContent = '🗑️';
+                    delBtn.title = 'Delete session';
+                    delBtn.style.background = 'none';
+                    delBtn.style.border = 'none';
+                    delBtn.style.color = '#ff5252';
+                    delBtn.style.cursor = 'pointer';
+                    delBtn.style.marginLeft = '6px';
+                    delBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        if (confirm('Delete this session?')) {
+                            deleteSession(session.id);
+                            updateHistory();
+                            renderChat();
+                        }
+                    };
+                    div.appendChild(delBtn);
+                    historyList.appendChild(div);
+                });
+            }
+
+            // --- New session ---
+            newSessionBtn.onclick = () => {
+                createSession('New Chat');
+                updateHistory();
+                renderChat();
+                inputBox.focus();
+            };
+
+            // --- Chat submit ---
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                errorDiv.textContent = '';
+                const input = inputBox.value.trim();
+                if (!input) {
+                    errorDiv.textContent = 'Please enter some input.';
+                    return;
+                }
+                addBubble(input, true);
+                inputBox.value = '';
+                inputBox.focus();
+                try {
+                    const res = await fetch('/gpointlesst', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ input })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        addBubble(data.reply, false);
+                        // Save to session history
+                        const session = getActiveSession();
+                        if (session) {
+                            session.history.push({ user: input, bot: data.reply });
+                            saveSessions();
+                            updateHistory();
+                        }
+                    } else {
+                        errorDiv.textContent = data.error || 'Something went wrong.';
+                    }
+                } catch (err) {
+                    errorDiv.textContent = 'Network error.';
+                }
+            };
+
+            // Allow Enter key to submit the form in the textarea (Shift+Enter for newline)
+            inputBox.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    form.requestSubmit();
+                }
+            });
+
+            // --- Initial load ---
+            loadSessions();
+            if (!sessions.length) createSession('New Chat');
+            updateHistory();
+            renderChat();
+        }
+
+        // --- App init ---
+        // Profile slot click opens modal
+        document.addEventListener('DOMContentLoaded', function() {
+            setupChat();
+        });
+        // --- Extra styles for active session highlight ---
+        const style = document.createElement('style');
+        style.innerHTML = `.active-session { background: #333 !important; color: #ffb300 !important; border: 1.5px solid #ffb300 !important; }`;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
