@@ -28,6 +28,6 @@ def generate_response(user_input):
         f"User input: {user_input}"
     )
 
-    model = genai.GenerativeModel('gemini-1.5-flash-latest')
+    model = genai.GenerativeModel('gemini-2.0-flash-001')
     response = model.generate_content(prompt)
     return response.text.strip() if hasattr(response, 'text') else str(response)
